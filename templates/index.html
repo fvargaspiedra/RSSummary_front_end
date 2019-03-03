@@ -46,7 +46,7 @@
 
     <main role="main" class="container pb-1">
 
-      <div class="alert alert-info text-justify p-5" role="alert">
+      <div class="alert alert-secondary text-justify p-4" role="alert">
         <h4 class="alert-heading">RSSummary</h4>
         Description goes here.
       </div>
@@ -82,8 +82,16 @@
         .done(function(data) {
           // Append cards with the values obtained from the server
           console.log(data)
-          $.each(data.RSSummary, function( i, val ) {
-            $("#cards").append("<div class='card'><div class='card-body'><h5 class='card-title'>" + val.title + "</h5><p class='card-text'>" + val.description + "</p></div></div>");
+          $.each(data.RSSummary, function(i, card) {
+            var sentiments = "";
+            var keywords = "";
+            $.each(card.keywords, function (j, keyword) {
+              keywords = keywords + "<span class='badge badge-dark'>" + keyword + "</span>\n";
+            })
+            $.each(card.sentiments, function (j, sentiment) {
+              sentiments = sentiments + "<span class='badge badge-info'>" + sentiment + "</span>\n";
+            })
+            $("#cards").append("<div class='card'><div class='card-header'>" + card.title + "</div><div class='card-body'><p class='card-text'>" + card.description + "</p><p class='text-muted text-right'><small>" + card.author + "</small></p><p>" + keywords + sentiments + "</p></div><div class='card-footer text-muted text-right'><a href='" + card.url + "' target='_blank'>Link to article</a></div></div>");
           });
         });
       }
