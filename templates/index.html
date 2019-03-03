@@ -24,7 +24,7 @@
     <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
       <a class="navbar-brand navbar-brand-logo" href="/">
         <div>
-          <img src="static/akamai360.svg" height="24">
+          <img src="static/rssummary.svg" height="24">
         </div>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,9 @@
         Description goes here.
       </div>
 
+      <div class="card-columns" id="cards">
+      </div>
+
     </main>
 
     <footer class="footer">
@@ -58,6 +61,33 @@
         <span class="text-muted">CS-498 CCA - <a href="https://github.com" target="_blank">Team #12</a>. 2019 &#x1F60A</span>
       </div>
     </footer>
+
+    <script>
+
+      $(document).ready(function() {
+        // Load latest set of cards
+        getCards(20)
+      });
+
+      // Get the list of projects for a specific environment (qa or labs) 
+      function getCards(numberArticles, startKey = 0) {
+        // Get the information from the server
+        $.ajax({
+          type : 'GET',
+          url : '/v1/get-articles?number=' + numberArticles,
+          error: function(request, status, error) {
+            addAlert(request.responseText)
+          }
+        })
+        .done(function(data) {
+          // Append cards with the values obtained from the server
+          console.log(data)
+          $.each(data.RSSummary, function( i, val ) {
+            $("#cards").append("<div class='card'><div class='card-body'><h5 class='card-title'>" + val.title + "</h5><p class='card-text'>" + val.description + "</p></div></div>");
+          });
+        });
+      }
+    </script>
 
   </body>
 </html>
