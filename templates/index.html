@@ -48,7 +48,7 @@
 
       <div class="alert alert-secondary text-justify p-4" role="alert">
         <h4 class="alert-heading">RSSummary</h4>
-        Description goes here.
+        Below you will find a deck of cards. Each card is a digested news article from many different RSS feed sources. Each card includes the title, description, author, and the link to the news article. It also includes clickable <span class='badge badge-dark'>keyword</span> tags and <span class='badge badge-info'>sentiment</span> tags.
       </div>
 
       <div class="card-columns" id="cards">
@@ -64,27 +64,46 @@
 
     <script>
 
+      // Global variables
+      // Store the last key fetched
+      var last_key = 0;
+      // Store sentiment or keyword filter
+      var sentiment_filter = "{{ data.sentiment_filter }}"
+      var keyword_filter = "{{ data.keyword_filter }}"
+
+      console.log(sentiment_filter);
+      console.log(keyword_filter);
+
       $(document).ready(function() {
         // Load latest set of cards
-        getCards(20)
+        getCards(20, 0, sentiment_filter, keyword_filter)
+
+        // When user reaches bottom of the page, fetch 20 more cards
+        $(window).on("scroll", function() {
+          var scrollHeight = $(document).height();
+          var scrollPosition = $(window).height() + $(window).scrollTop();
+          if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
+              getCards(20, last_key, sentiment_filter, keyword_filter)
+          }
+        });
       });
 
       // Get the list of projects for a specific environment (qa or labs) 
-      function getCards(numberArticles, startKey = 0) {
+      function getCards(numberArticles, startKey = 0, sentimentFilter = "all", keywordFilter = "all") {
         // Get the information from the server
         $.ajax({
           type : 'GET',
-          url : '/v1/get-articles?number=' + numberArticles,
+          url : '/v1/get-articles?number=' + numberArticles + '&start=' + startKey + '&sentiment=' + sentimentFilter + '&keyword=' + keywordFilter,
           error: function(request, status, error) {
             addAlert(request.responseText)
           }
         })
         .done(function(data) {
           // Append cards with the values obtained from the server
-          console.log(data)
           $.each(data.RSSummary, function(i, card) {
             var sentiments = "";
             var keywords = "";
+            last_key = card.key;
             $.each(card.keywords, function (j, keyword) {
               keywords = keywords + "<span class='badge badge-dark'>" + keyword + "</span>\n";
             })
