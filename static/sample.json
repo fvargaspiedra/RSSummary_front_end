@@ -1,0 +1,31 @@
+{
+  "RSSummary": [
+  	{
+  		"key" : "1",
+  		"title" : "This is article A",
+  		"author" : "John Doe",
+  		"description" : "This article is about A.",
+      "url" : "https://www.google.com",
+  		"keywords" : ["technology", "science"],
+  		"sentiment" : ["neutral"]
+  	},
+  	 {
+  		"key" : "2",
+  		"title" : "This is article B",
+  		"author" : "Boo Boo",
+  		"description" : "This article is about B.",
+  		"keywords" : ["medicine", "vaccines", "doctors"],
+      "url" : "https://www.google.com",
+  		"sentiment" : ["sad", "tragedy"]
+  	},
+  	 {
+  		"key" : "3",
+  		"title" : "This is article C",
+  		"author" : "Foo Foo",
+  		"description" : "This article is about C.",
+      "url" : "https://www.google.com",
+  		"keywords" : ["commerce", "revenue"],
+  		"sentiment" : ["happy"]
+  	}
+  ]
+ }
