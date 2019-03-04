@@ -39,7 +39,22 @@
             <a class="nav-link" href="https://github.com">Contact</a>
           </li>
         </ul>
-        <p class="navbar-right mb-0 text-secondary">RSSummary</p>
+
+        <form>
+          <div class="input-group">
+            <input class="form-control" placeholder="Search this..." id="search_query">
+            <div class="input-group-append">
+              <label class="input-group-text">by</label>
+            </div>      
+            <div class="input-group-append">
+              <select class="custom-select mr-sm-2" id="search_filter">
+                <option value="keyword" selected>keyword</option>
+                <option value="sentiment">sentiment</option>
+              </select>
+            </div>
+            <input type="button" class="btn btn-outline-success" value="Search" id="submit">
+          </div>
+        </form>
       </div>
     </nav>
     </header>
@@ -71,9 +86,6 @@
       var sentiment_filter = "{{ data.sentiment_filter }}"
       var keyword_filter = "{{ data.keyword_filter }}"
 
-      console.log(sentiment_filter);
-      console.log(keyword_filter);
-
       $(document).ready(function() {
         // Load latest set of cards
         getCards(20, 0, sentiment_filter, keyword_filter)
@@ -84,6 +96,14 @@
           var scrollPosition = $(window).height() + $(window).scrollTop();
           if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
               getCards(20, last_key, sentiment_filter, keyword_filter)
+          }
+        });
+
+        // When there is a search
+        $('#submit').click(function(){
+          // Only do something when there is a search query
+          if($('#search_query').val()) {
+            window.location.href="/?" + $('#search_filter option:selected').text() + "=" + $('#search_query').val();
           }
         });
       });

@@ -39,6 +39,8 @@ def get_articles():
 		# Retrieve the latest number_articles after start_key from DB
 		print("dummy")
 
+	# TBD When no new data is available, then respond with a 204.
+
 	# Read dummy static JSON for response temporarily
 	SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 	json_url = os.path.join(SITE_ROOT, "static/", "sample.json")
